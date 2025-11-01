@@ -1,0 +1,14 @@
+<templateSet group="JavaScript">
+  <template name="uv4" value="import { v4 as uuidv4 } from &quot;uuid&quot;" description="imports v4 from uuid as uuidv4" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JS_TOP_LEVEL_STATEMENT" value="true" />
+      <option name="TS_TOP_LEVEL_STATEMENT" value="true" />
+    </context>
+  </template>
+  <template name="nno" value="// non-null: this is the original code" description="Non null for ML legacy justification" toReformat="false" toShortenFQNames="true">
+    <context>
+      <option name="JS_STATEMENT" value="true" />
+      <option name="TS_STATEMENT" value="true" />
+    </context>
+  </template>
+</templateSet>

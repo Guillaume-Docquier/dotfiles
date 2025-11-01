@@ -1,0 +1,11 @@
+ru.adelf.idea.dotenv
+JavaScriptDebugger
+com.intellij.tasks
+Docker
+IdeaVIM
+org.jetbrains.plugins.github
+com.intellij.react
+mobi.hsz.idea.gitignore
+dev.nx.console
+mdx.js
+org.jetbrains.security.package-checker

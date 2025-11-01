@@ -1,0 +1,13 @@
+<templateSet group="JavaScript Testing">
+  <template name="it" value="it('should $NAME$', () =&gt; {&#10;  // Arrange&#10;  $END$&#10;  // Act&#10;  // Assert&#10;}); " description="Inserts it() block" toReformat="true" toShortenFQNames="true">
+    <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true" />
+    <context />
+  </template>
+  <template name="ait" value="it('should $NAME$', async () =&gt; {&#10;  // Arrange&#10;  $END$&#10;  // Act&#10;  // Assert&#10;}); " description="Inserts async it() block" toReformat="true" toShortenFQNames="true">
+    <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JS_STATEMENT" value="true" />
+      <option name="TS_STATEMENT" value="true" />
+    </context>
+  </template>
+</templateSet>

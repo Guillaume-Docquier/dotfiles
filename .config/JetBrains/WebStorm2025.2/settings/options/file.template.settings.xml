@@ -1,0 +1,11 @@
+<application>
+  <component name="ExportableFileTemplateSettings">
+    <default_templates>
+      <template name="mm-model Stub File.ts" file-name="create${NAME}Stub.ts" reformat="true" live-template-enabled="false" />
+      <template name="Vitest File.ts" file-name="${NAME}.test.ts" reformat="true" live-template-enabled="true" />
+    </default_templates>
+    <internal_templates>
+      <template name="TypeScript JSX File.tsx" reformat="true" live-template-enabled="true" enabled="true" />
+    </internal_templates>
+  </component>
+</application>

@@ -1,0 +1,168 @@
+<application>
+  <component name="ToolWindowLayout"><![CDATA[{
+  "layouts": {
+    "Custom": {
+      "v2": [
+        {
+          "id": "Bookmarks",
+          "isShowStripeButton": false,
+          "isSplit": true
+        },
+        {
+          "id": "Backup and Sync History",
+          "isShowStripeButton": false
+        },
+        {
+          "id": "npm",
+          "isShowStripeButton": false,
+          "isSplit": true
+        },
+        {
+          "id": "Pull Requests",
+          "isShowStripeButton": false
+        },
+        {
+          "id": "Project",
+          "order": 0,
+          "contentUiType": "COMBO",
+          "weight": 0.25
+        },
+        {
+          "id": "Terminal",
+          "order": 1
+        },
+        {
+          "id": "Structure",
+          "order": 3,
+          "weight": 0.25,
+          "isSplit": true
+        },
+        {
+          "id": "Database Changes",
+          "anchor": "BOTTOM",
+          "isShowStripeButton": false
+        },
+        {
+          "id": "TypeScript",
+          "anchor": "BOTTOM",
+          "isShowStripeButton": false
+        },
+        {
+          "id": "TODO",
+          "anchor": "BOTTOM",
+          "isShowStripeButton": false
+        },
+        {
+          "id": "File Transfer",
+          "anchor": "BOTTOM",
+          "isShowStripeButton": false
+        },
+        {
+          "id": "Version Control",
+          "order": 0,
+          "anchor": "BOTTOM"
+        },
+        {
+          "id": "Problems",
+          "order": 3,
+          "anchor": "BOTTOM"
+        },
+        {
+          "id": "Problems View",
+          "order": 4,
+          "anchor": "BOTTOM"
+        },
+        {
+          "id": "Commit",
+          "order": 5,
+          "anchor": "BOTTOM",
+          "weight": 0.25
+        },
+        {
+          "id": "Debug",
+          "order": 6,
+          "anchor": "BOTTOM",
+          "weight": 0.3300095
+        },
+        {
+          "id": "Run",
+          "order": 7,
+          "anchor": "BOTTOM",
+          "weight": 0.3300095
+        },
+        {
+          "id": "Find",
+          "order": 8,
+          "anchor": "BOTTOM",
+          "isVisible": true,
+          "weight": 0.3300095
+        },
+        {
+          "id": "Services",
+          "order": 11,
+          "anchor": "BOTTOM",
+          "isShowStripeButton": false,
+          "weight": 0.3300095
+        },
+        {
+          "id": "Endpoints",
+          "anchor": "RIGHT",
+          "isShowStripeButton": false
+        },
+        {
+          "id": "Notifications",
+          "order": 0,
+          "anchor": "RIGHT",
+          "contentUiType": "COMBO",
+          "isShowStripeButton": false,
+          "weight": 0.25
+        },
+        {
+          "id": "AIAssistant",
+          "order": 1,
+          "anchor": "RIGHT",
+          "weight": 0.25
+        },
+        {
+          "id": "Database",
+          "order": 2,
+          "anchor": "RIGHT",
+          "isShowStripeButton": false,
+          "weight": 0.25
+        },
+        {
+          "id": "Gradle",
+          "order": 3,
+          "anchor": "RIGHT",
+          "weight": 0.25
+        },
+        {
+          "id": "Maven",
+          "order": 4,
+          "anchor": "RIGHT",
+          "weight": 0.25
+        },
+        {
+          "id": "Nx Console",
+          "order": 6,
+          "anchor": "RIGHT",
+          "isShowStripeButton": false
+        },
+        {
+          "id": "Coverage",
+          "order": 7,
+          "anchor": "RIGHT",
+          "weight": 0.32999998,
+          "isSplit": true
+        }
+      ],
+      "unifiedWeights": {
+        "top": 0.33,
+        "left": 0.33,
+        "bottom": 0.3300095,
+        "right": 0.32999998
+      }
+    }
+  }
+}]]></component>
+</application>
