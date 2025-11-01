@@ -5,7 +5,7 @@ Inspired by [Mathias’s dotfiles](https://github.com/mathiasbynens/dotfiles?tab
 # Installation
 
 ```bash
-source ./setup/setup-all.sh
+source ./setup/all.sh
 # Git credentials
 # Not in the repository, to prevent people from accidentally committing under my name
 git config --global user.name "Guillaume Docquier"
