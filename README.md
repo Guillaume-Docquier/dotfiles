@@ -18,7 +18,6 @@ git config --global user.email "guillaumedocquier@hotmail.com"
 - don't install if already present
 - prompt for info (name, email, paths, etc)
 - bashrc bootstrap
-- idea
 - ssh keys generation
 - displaylink for ubuntu?
 - vim
