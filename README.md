@@ -15,10 +15,13 @@ git config --global user.email "guillaumedocquier@hotmail.com"
 # TODO
 
 - install without git
+- don't install if already present
+- prompt for info (name, email, paths, etc)
 - bashrc bootstrap
 - idea
-- ssh keys
+- ssh keys generation
 - displaylink for ubuntu?
-- vimrc
+- vim
 - git
 - htop
+- docker
