@@ -1,0 +1,85 @@
+# Get git info for the prompt
+# Supports:
+# - branch name
+# - merge, rebase and bisect status (not cherry-pick)
+parse_git_branch() {
+  local g="$(git rev-parse --git-dir 2>/dev/null)"
+  if [ -n "$g" ]; then
+    local r
+    local b
+    if [ -d "$g/rebase-apply" ]; then
+      if test -f "$g/rebase-apply/rebasing"; then
+        r="|REBASE"
+      elif test -f "$g/rebase-apply/applying"; then
+        r="|AM"
+      else
+        r="|AM/REBASE"
+      fi
+      b="$(git symbolic-ref HEAD 2>/dev/null)"
+    elif [ -f "$g/rebase-merge/interactive" ]; then
+      r="|REBASE-i"
+      b="$(cat "$g/rebase-merge/head-name")"
+    elif [ -d "$g/rebase-merge" ]; then
+      r="|REBASE-m"
+      b="$(cat "$g/rebase-merge/head-name")"
+    elif [ -f "$g/MERGE_HEAD" ]; then
+      r="|MERGING"
+      b="$(git symbolic-ref HEAD 2>/dev/null)"
+    else
+      if [ -f "$g/BISECT_LOG" ]; then
+        r="|BISECTING"
+      fi
+      if ! b="$(git symbolic-ref HEAD 2>/dev/null)"; then
+        if ! b="$(git describe --exact-match HEAD 2>/dev/null)"; then
+          b="$(cut -c1-7 "$g/HEAD")..."
+        fi
+      fi
+    fi
+
+    echo "(${b##refs/heads/}$r)"
+  fi
+}
+
+# Color syntax: \[\033[ATTRIBUTE;COLORm\]
+# Attributes:
+#   0: Normal, default value
+#   1: Bold
+#   2: Dim
+#   4: Underlined
+#   5: Blinking
+#   7: Swap background and foreground
+#   8: Hidden
+# Colors:
+#   30: Black
+#   31: Red
+#   32: Green
+#   33: Yellow
+#   34: Blue
+#   35: Purple
+#   36: Cyan
+#   37: White
+
+BOLD_PURPLE='\[\033[1;35m\]'
+BOLD_GREEN='\[\033[1;32m\]'
+BOLD_YELLOW='\[\033[1;33m\]'
+BOLD_CYAN='\[\033[1;36m\]'
+NORMAL_WHITE='\[\033[0m\]'
+
+# ${debian_chroot:+($debian_chroot)}: Tell Bash to let you know if you’re using a Debian chroot environment (hidden)
+DEBIAN_STUFF=${debian_chroot:+($debian_chroot)}
+
+# Prompt syntax:
+# \n: newline
+# \t: time
+# \u: username
+# \w: working directory
+# \$: Escaped dollar sign
+#
+# Bash manual: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Controlling-the-Prompt
+
+# custom prompt (assumes colors are supported):
+#
+# [14:19:55] guillaume-docquier ~/dev/dotfiles (main)
+# $
+#
+PS1="$DEBIAN_STUFF\n$BOLD_PURPLE[\t] $BOLD_GREEN\u $BOLD_YELLOW\w $BOLD_CYAN\$(parse_git_branch)$NORMAL_WHITE\n\$ "
