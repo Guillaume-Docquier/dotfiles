@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+SCRIPT_DIR="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+
 # Color constants
 COLOR_NORMAL_WHITE='\033[0m'
 COLOR_BOLD_CYAN='\033[1;36m'
@@ -51,15 +53,17 @@ source_bashrc() {
 
 print_newline
 print_important "Setting up git..."
-execute_command "source ./git.sh"
+execute_command "source $SCRIPT_DIR/git.sh"
 
 print_newline
 print_important "Setting up nvm for nodejs development..."
-execute_command "source ./setup-nvm.sh"
+execute_command "source $SCRIPT_DIR/nvm.sh"
 
 # End of execution
 
 # Clean up
+unset SCRIPT_DIR
+
 unset COLOR_NORMAL_WHITE
 unset COLOR_BOLD_CYAN
 unset COLOR_BOLD_GREEN

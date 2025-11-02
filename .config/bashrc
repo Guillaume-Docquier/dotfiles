@@ -1,2 +1,6 @@
-source bash_prompt
-source bash_aliases
+SCRIPT_DIR="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
+
+source $SCRIPT_DIR/bash_prompt
+source $SCRIPT_DIR/bash_aliases
+
+unset SCRIPT_DIR
