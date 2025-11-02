@@ -26,3 +26,4 @@ git config --global user.email "your.email@mail.com"
 - git
 - htop
 - docker
+- cloc
