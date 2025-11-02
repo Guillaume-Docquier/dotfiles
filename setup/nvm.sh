@@ -15,7 +15,7 @@ print_normal "Installed node $(node -v) and npm $(npm -v)"
 
 print_newline
 print_normal "Setting up npm scripts autocompletion"
-execute_command "npm completion >> ~/.bashrc"
+npm completion >> ~/.bashrc
 source_bashrc
 
 # Clean up
