@@ -82,4 +82,4 @@ DEBIAN_STUFF=${debian_chroot:+($debian_chroot)}
 # [14:19:55] guillaume-docquier ~/dev/dotfiles (main)
 # $
 #
-PS1="$DEBIAN_STUFF\n$BOLD_PURPLE[\t] $BOLD_GREEN\u $BOLD_YELLOW\w $BOLD_CYAN\$(parse_git_branch)$NORMAL_WHITE\n\$ "
+PS1="$DEBIAN_STUFF\n$BOLD_PURPLE[\t] $BOLD_GREEN\u $BOLD_YELLOW\w $BOLD_CYAN$(parse_git_branch)$NORMAL_WHITE\n\$ "
