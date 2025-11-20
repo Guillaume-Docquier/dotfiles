@@ -1,11 +1,12 @@
 [core]
 	editor = vim
+	pager = less -N
 [pull]
 	rebase = false
 [init]
 	defaultBranch = main
 [format]
-        pretty = oneline
+    pretty = oneline
 [log]
-        decorate = auto
-        abbrevcommit = true
+    decorate = auto
+    abbrevcommit = true
