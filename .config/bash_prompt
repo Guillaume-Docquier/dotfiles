@@ -84,10 +84,12 @@ DEBIAN_STUFF=${debian_chroot:+($debian_chroot)}
 #
 
 case "$(uname -s)" in
-    CYGWIN_NT-*|MINGW64_NT-*|MSYS_NT-*|WindowsNT)
-        PS1="$DEBIAN_STUFF\n$BOLD_PURPLE[\t] $BOLD_GREEN\u $BOLD_YELLOW\w $BOLD_CYAN$(parse_git_branch)$NORMAL_WHITE\n\$ "
-        ;;
-    *)
-        PS1="$DEBIAN_STUFF\n$BOLD_PURPLE[\t] $BOLD_GREEN\u $BOLD_YELLOW\w $BOLD_CYAN"'$(parse_git_branch)'"$NORMAL_WHITE\n\$ "
-        ;;
+  CYGWIN_NT-*|MINGW64_NT-*|MSYS_NT-*|WindowsNT)
+    git_part=$(parse_git_branch)
+    ;;
+  *)
+    git_part='$(parse_git_branch)'
+    ;;
 esac
+
+PS1="$DEBIAN_STUFF\n$BOLD_PURPLE[\t] $BOLD_GREEN\u $BOLD_YELLOW\w $BOLD_CYAN${git_part}$NORMAL_WHITE\n\$ "
