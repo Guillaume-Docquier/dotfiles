@@ -83,13 +83,9 @@ DEBIAN_STUFF=${debian_chroot:+($debian_chroot)}
 # $
 #
 
-case "$(uname -s)" in
-  CYGWIN_NT-*|MINGW64_NT-*|MSYS_NT-*|WindowsNT)
-    git_part=$(parse_git_branch)
-    ;;
-  *)
-    git_part='$(parse_git_branch)'
-    ;;
-esac
+update_prompt() {
+  GIT_BRANCH="$(parse_git_branch)"
+}
 
-PS1="$DEBIAN_STUFF\n$BOLD_PURPLE[\t] $BOLD_GREEN\u $BOLD_YELLOW\w $BOLD_CYAN${git_part}$NORMAL_WHITE\n\$ "
+PROMPT_COMMAND="update_prompt${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
+PS1="$DEBIAN_STUFF\n$BOLD_PURPLE[\t] $BOLD_GREEN\u $BOLD_YELLOW\w $BOLD_CYAN\$GIT_BRANCH$NORMAL_WHITE\n\$ "
