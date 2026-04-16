@@ -26,7 +26,6 @@ awt() {
   local repo_name
   local parent_dir
   local worktree_dir
-  local -a agent_cmd
 
   if [[ -z "$branch_name" || -z "$agent_name" ]]; then
     echo "Usage: awt <branch-name> <codex|claude|copilot|gemini> [yolo]"
@@ -39,29 +38,7 @@ awt() {
   fi
 
   case "$agent_name" in
-    codex)
-      agent_cmd=(codex)
-      if [[ "$launch_mode" == "yolo" ]]; then
-        agent_cmd+=(--dangerously-bypass-approvals-and-sandbox)
-      fi
-      ;;
-    claude)
-      agent_cmd=(claude)
-      if [[ "$launch_mode" == "yolo" ]]; then
-        agent_cmd+=(--dangerously-skip-permissions)
-      fi
-      ;;
-    copilot)
-      agent_cmd=(copilot)
-      if [[ "$launch_mode" == "yolo" ]]; then
-        agent_cmd+=(--allow-all-tools --allow-all-paths)
-      fi
-      ;;
-    gemini)
-      agent_cmd=(gemini)
-      if [[ "$launch_mode" == "yolo" ]]; then
-        agent_cmd+=(--yolo)
-      fi
+    codex|claude|copilot|gemini)
       ;;
     *)
       echo "Unsupported agent: $agent_name"
@@ -70,8 +47,8 @@ awt() {
       ;;
   esac
 
-  if ! command -v "${agent_cmd[0]}" >/dev/null 2>&1; then
-    echo "Agent command not found: ${agent_cmd[0]}"
+  if ! command -v "$agent_name" >/dev/null 2>&1; then
+    echo "Agent command not found: $agent_name"
     return 1
   fi
 
@@ -91,6 +68,49 @@ awt() {
   fi
 
   cd "$worktree_dir" || return 1
+
+  if [[ "$launch_mode" == "yolo" ]]; then
+    yolo "$agent_name"
+  else
+    "$agent_name"
+  fi
+}
+
+# yolo <codex|claude|copilot|gemini>
+# Launches the selected agent in the current directory with its most permissive mode.
+yolo() {
+  local agent_name="$1"
+  local -a agent_cmd
+
+  if [[ -z "$agent_name" ]]; then
+    echo "Usage: yolo <codex|claude|copilot|gemini>"
+    return 1
+  fi
+
+  case "$agent_name" in
+    codex)
+      agent_cmd=(codex --dangerously-bypass-approvals-and-sandbox)
+      ;;
+    claude)
+      agent_cmd=(claude --dangerously-skip-permissions)
+      ;;
+    copilot)
+      agent_cmd=(copilot --allow-all-tools --allow-all-paths)
+      ;;
+    gemini)
+      agent_cmd=(gemini --yolo)
+      ;;
+    *)
+      echo "Unsupported agent: $agent_name"
+      echo "Supported agents: codex, claude, copilot, gemini"
+      return 1
+      ;;
+  esac
+
+  if ! command -v "${agent_cmd[0]}" >/dev/null 2>&1; then
+    echo "Agent command not found: ${agent_cmd[0]}"
+    return 1
+  fi
 
   "${agent_cmd[@]}"
 }
