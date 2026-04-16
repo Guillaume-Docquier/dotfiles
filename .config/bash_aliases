@@ -16,39 +16,26 @@ alias gdef="git symbolic-ref --short refs/remotes/origin/HEAD | sed 's@^origin/@
 alias gmr='git checkout $(gdef) && git pull origin $(gdef) && gfap && printf "\nCurrent branches\n" && git branch'
 alias gpr='git pull --rebase'
 
-# awt <branch-name> <codex|claude|copilot|gemini> [yolo]
-# Creates a sibling git worktree, cds into it, and launches the selected agent.
-awt() {
+# cwt <branch-name> [command...]
+# Creates a sibling git worktree, cds into it, and runs the optionally provided command.
+cwt() {
   local branch_name="$1"
-  local agent_name="$2"
-  local launch_mode="$3"
+
   local git_root
   local repo_name
   local parent_dir
   local worktree_dir
+  local command_string
 
-  if [[ -z "$branch_name" || -z "$agent_name" ]]; then
-    echo "Usage: awt <branch-name> <codex|claude|copilot|gemini> [yolo]"
+  if [[ -z "$branch_name" ]]; then
+    echo "Usage: cwt <branch-name> [command...]"
     return 1
   fi
+
+  shift
 
   if ! git_root="$(git rev-parse --show-toplevel 2>/dev/null)"; then
-    echo "awt must be run from inside a git repository"
-    return 1
-  fi
-
-  case "$agent_name" in
-    codex|claude|copilot|gemini)
-      ;;
-    *)
-      echo "Unsupported agent: $agent_name"
-      echo "Supported agents: codex, claude, copilot, gemini"
-      return 1
-      ;;
-  esac
-
-  if ! command -v "$agent_name" >/dev/null 2>&1; then
-    echo "Agent command not found: $agent_name"
+    echo "cwt must be run from inside a git repository"
     return 1
   fi
 
@@ -62,18 +49,23 @@ awt() {
   fi
 
   if git show-ref --verify --quiet "refs/heads/$branch_name"; then
+    printf '+ git -C %q worktree add %q %q\n' "$git_root" "$worktree_dir" "$branch_name"
     git -C "$git_root" worktree add "$worktree_dir" "$branch_name" || return 1
   else
+    printf '+ git -C %q worktree add -b %q %q\n' "$git_root" "$branch_name" "$worktree_dir"
     git -C "$git_root" worktree add -b "$branch_name" "$worktree_dir" || return 1
   fi
 
+  printf '+ cd %q\n' "$worktree_dir"
   cd "$worktree_dir" || return 1
 
-  if [[ "$launch_mode" == "yolo" ]]; then
-    yolo "$agent_name"
-  else
-    "$agent_name"
+  if [[ "$#" -eq 0 ]]; then
+    return 0
   fi
+
+  printf -v command_string '%q ' "$@"
+  printf '+ %s\n' "${command_string% }"
+  eval "${command_string% }"
 }
 
 # ewt [--delete]
@@ -129,16 +121,18 @@ ewt() {
   fi
 }
 
-# yolo <codex|claude|copilot|gemini>
+# yolo <codex|claude|copilot|gemini> [args...]
 # Launches the selected agent in the current directory with its most permissive mode.
 yolo() {
   local agent_name="$1"
   local -a agent_cmd
 
   if [[ -z "$agent_name" ]]; then
-    echo "Usage: yolo <codex|claude|copilot|gemini>"
+    echo "Usage: yolo <codex|claude|copilot|gemini> [args...]"
     return 1
   fi
+
+  shift
 
   case "$agent_name" in
     codex)
@@ -165,5 +159,5 @@ yolo() {
     return 1
   fi
 
-  "${agent_cmd[@]}"
+  "${agent_cmd[@]}" "$@"
 }
