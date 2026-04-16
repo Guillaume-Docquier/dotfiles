@@ -76,6 +76,59 @@ awt() {
   fi
 }
 
+# ewt [--delete]
+# Exits a linked git worktree back to the original repo checkout.
+# Pass --delete to remove the current worktree after leaving it.
+ewt() {
+  local delete_worktree=0
+  local current_root
+  local common_dir
+  local original_repo
+
+  case "$1" in
+    "")
+      ;;
+    --delete)
+      delete_worktree=1
+      ;;
+    *)
+      echo "Usage: ewt [--delete]"
+      return 1
+      ;;
+  esac
+
+  if ! current_root="$(git rev-parse --show-toplevel 2>/dev/null)"; then
+    echo "ewt must be run from inside a git repository"
+    return 1
+  fi
+
+  if ! common_dir="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"; then
+    echo "Unable to determine the repo common directory"
+    return 1
+  fi
+
+  original_repo="$(dirname "$common_dir")"
+
+  if [[ "$current_root" == "$original_repo" ]]; then
+    if (( delete_worktree )); then
+      echo "Refusing to delete the original repo checkout"
+      return 1
+    fi
+
+    printf '+ cd %q\n' "$original_repo"
+    cd "$original_repo" || return 1
+    return 0
+  fi
+
+  printf '+ cd %q\n' "$original_repo"
+  cd "$original_repo" || return 1
+
+  if (( delete_worktree )); then
+    printf '+ git -C %q worktree remove %q\n' "$original_repo" "$current_root"
+    git -C "$original_repo" worktree remove "$current_root" || return 1
+  fi
+}
+
 # yolo <codex|claude|copilot|gemini>
 # Launches the selected agent in the current directory with its most permissive mode.
 yolo() {
