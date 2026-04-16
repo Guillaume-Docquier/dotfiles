@@ -15,3 +15,82 @@ alias grc='git add --all && git rebase --continue'
 alias gdef="git symbolic-ref --short refs/remotes/origin/HEAD | sed 's@^origin/@@'"
 alias gmr='git checkout $(gdef) && git pull origin $(gdef) && gfap && printf "\nCurrent branches\n" && git branch'
 alias gpr='git pull --rebase'
+
+# awt <branch-name> <codex|claude|copilot|gemini> [yolo]
+# Creates a sibling git worktree, cds into it, and launches the selected agent.
+awt() {
+  local branch_name="$1"
+  local agent_name="$2"
+  local launch_mode="$3"
+  local git_root
+  local repo_name
+  local parent_dir
+  local worktree_dir
+  local -a agent_cmd
+
+  if [[ -z "$branch_name" || -z "$agent_name" ]]; then
+    echo "Usage: awt <branch-name> <codex|claude|copilot|gemini> [yolo]"
+    return 1
+  fi
+
+  if ! git_root="$(git rev-parse --show-toplevel 2>/dev/null)"; then
+    echo "awt must be run from inside a git repository"
+    return 1
+  fi
+
+  case "$agent_name" in
+    codex)
+      agent_cmd=(codex)
+      if [[ "$launch_mode" == "yolo" ]]; then
+        agent_cmd+=(--dangerously-bypass-approvals-and-sandbox)
+      fi
+      ;;
+    claude)
+      agent_cmd=(claude)
+      if [[ "$launch_mode" == "yolo" ]]; then
+        agent_cmd+=(--dangerously-skip-permissions)
+      fi
+      ;;
+    copilot)
+      agent_cmd=(copilot)
+      if [[ "$launch_mode" == "yolo" ]]; then
+        agent_cmd+=(--allow-all-tools --allow-all-paths)
+      fi
+      ;;
+    gemini)
+      agent_cmd=(gemini)
+      if [[ "$launch_mode" == "yolo" ]]; then
+        agent_cmd+=(--yolo)
+      fi
+      ;;
+    *)
+      echo "Unsupported agent: $agent_name"
+      echo "Supported agents: codex, claude, copilot, gemini"
+      return 1
+      ;;
+  esac
+
+  if ! command -v "${agent_cmd[0]}" >/dev/null 2>&1; then
+    echo "Agent command not found: ${agent_cmd[0]}"
+    return 1
+  fi
+
+  repo_name="$(basename "$git_root")"
+  parent_dir="$(dirname "$git_root")"
+  worktree_dir="$parent_dir/$repo_name-$branch_name"
+
+  if [[ -e "$worktree_dir" ]]; then
+    echo "Worktree path already exists: $worktree_dir"
+    return 1
+  fi
+
+  if git show-ref --verify --quiet "refs/heads/$branch_name"; then
+    git -C "$git_root" worktree add "$worktree_dir" "$branch_name" || return 1
+  else
+    git -C "$git_root" worktree add -b "$branch_name" "$worktree_dir" || return 1
+  fi
+
+  cd "$worktree_dir" || return 1
+
+  "${agent_cmd[@]}"
+}
