@@ -122,10 +122,9 @@ ewt() {
 }
 
 # yolo <codex|claude|copilot|gemini> [args...]
-# Launches the selected agent in the current directory with its most permissive mode.
+# Launches the selected agent in the current directory with its most permissive mode through sbx.
 yolo() {
   local agent_name="$1"
-  local -a agent_cmd
 
   if [[ -z "$agent_name" ]]; then
     echo "Usage: yolo <codex|claude|copilot|gemini> [args...]"
@@ -135,17 +134,7 @@ yolo() {
   shift
 
   case "$agent_name" in
-    codex)
-      agent_cmd=(codex --dangerously-bypass-approvals-and-sandbox)
-      ;;
-    claude)
-      agent_cmd=(claude --dangerously-skip-permissions)
-      ;;
-    copilot)
-      agent_cmd=(copilot --allow-all-tools --allow-all-paths)
-      ;;
-    gemini)
-      agent_cmd=(gemini --yolo)
+    codex|claude|copilot|gemini)
       ;;
     *)
       echo "Unsupported agent: $agent_name"
@@ -154,10 +143,10 @@ yolo() {
       ;;
   esac
 
-  if ! command -v "${agent_cmd[0]}" >/dev/null 2>&1; then
-    echo "Agent command not found: ${agent_cmd[0]}"
+  if ! command -v sbx >/dev/null 2>&1; then
+    echo "Sandbox command not found: sbx"
     return 1
   fi
 
-  "${agent_cmd[@]}" "$@"
+  sbx run "$agent_name" -- "$@"
 }
